@@ -17,6 +17,7 @@
         let pkgs = nixpkgs.legacyPackages.${system};
         in {
           pipelinix = mkPackage pkgs;
+          yaml2pipeline = pkgs.callCabal2nix "yaml2pipeline" ./yaml2pipeline {};
         });
       defaultPackage = forAllSystems (system: self.packages.${system}.pipelinix);
       lib = import ./lib.nix;

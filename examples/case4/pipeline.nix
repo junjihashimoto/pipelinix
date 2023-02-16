@@ -1,5 +1,5 @@
 {pkgs ? import <nixpkgs> {}
-,lib ? import (builtins.fetchTarball https://github.com/junjihashimoto/pipelinix/archive/main.tar.gz) {}}:
+,lib ? (import (builtins.fetchTarball https://github.com/junjihashimoto/pipelinix/archive/2e04642a7230de1999fd1d8b4d0c31cd2b9534d4.tar.gz)).lib}:
 lib.pipeline pkgs (self: {
   pre-processing = ''
     echo "{\"a\":1, \"b\":2}" > $out/hello.json

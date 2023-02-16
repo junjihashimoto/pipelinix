@@ -1,0 +1,25 @@
+pre-processing:
+  command: |
+    echo "{\"a\":1, \"b\":2}" > $out/hello.json
+
+main:
+  parameters:
+    - input
+  command: |
+    ${pkgs.jq}/bin/jq '.' < ${input}/hello.json > $out/hello.json
+
+post-processing:
+  parameters:
+    - input
+  command: |
+    sed -e 's/a/hello-world/g' < ${input}/hello.json > $out/hello.json
+
+main-with-pre-processing:
+  compose:
+    - self.main self.pre-processing
+
+default:
+  compose:
+    - self.pre-processing
+    - self.main
+    - self.post-processing
