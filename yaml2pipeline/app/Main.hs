@@ -1,11 +1,10 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -I nixpkgs=https://github.com/NixOS/nixpkgs/archive/2c1f2cc193dba77639132f817a27b1067ecd8267.tar.gz
-#! nix-shell -p "pkgs.haskell.packages.ghc922.ghcWithPackages (p: with p; [aeson text bytestring yaml])"
+#! nix-shell -p "pkgs.haskell.packages.ghc922.ghcWithPackages (p: with p; [aeson text bytestring yaml unordered-containers])"
 #! nix-shell -i "runhaskell"
 
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE OverloadedStrings #-}
-
 
 import GHC.Generics
 import Data.Aeson

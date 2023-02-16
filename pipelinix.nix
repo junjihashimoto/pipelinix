@@ -1,4 +1,5 @@
-{pkgs ? import <nixpkgs> {}}:
+{pkgs ? import <nixpkgs> {},
+ yaml2pipeline}:
 pkgs.writeScriptBin "pipelinix" ''
 #!/usr/bin/env bash
 
@@ -10,6 +11,9 @@ if [[ ! -z $command ]]; then
 fi
 
 genjson () {
+    if [ -f pipeline.yaml ] ; then
+      ${yaml2pipeline}/bin/yaml2pipeline > pipeline.nix
+    fi
     mkdir -p .pipelinix/touch
     nix eval --impure --expr 'builtins.mapAttrs (name: value: if builtins.isFunction(value) then {type="process";} else {type="drv"; value=value;}) (import ./pipeline.nix {})' --json > .pipelinix/drvs.json
 }
