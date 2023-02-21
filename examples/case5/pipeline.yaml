@@ -18,6 +18,12 @@ main-with-pre-processing:
   compose:
     - self.main self.pre-processing
 
+test-docker:
+  config:
+    sandbox: false
+  command: |
+    ${pkgs.docker-client}/bin/docker run busybox@sha256:907ca53d7e2947e849b839b1cd258c98fd3916c60f2e6e70c30edbf741ab6754 echo "hello from busybox" > $out/out.txt
+
 default:
   compose:
     - self.pre-processing

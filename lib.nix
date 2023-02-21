@@ -18,16 +18,23 @@ rec {
 
   process = pkgs: name: value:
     let loop = v:
-          if builtins.isFunction v
-          then arg: loop (v arg)
-          else (
-            if isDerivation v
-            then v
-            else
-              let env = if builtins.isString v then {} else v;
-                  exec = if builtins.isString v then v else v.exec;
-              in runCommandWithLog pkgs name env exec
-          );
+          if builtins.isFunction v then arg: loop (v arg)
+          else if isDerivation v then v
+          else if builtins.isPath v then runCommandWithLog pkgs name {} ''
+              FILETYPE=`file -b --mine-type ${v}`
+              case $command in
+                   application/gzip)
+                     tar xfz ${v} -C $out
+                   ;;
+                   *)
+                     ln -s ${v} $out/
+              esac
+            ''
+          else 
+            let env = if builtins.isString v then {} else v;
+                exec = if builtins.isString v then v else v.exec;
+            in runCommandWithLog pkgs name env exec
+          ;
     in loop value;
 
   pipeline = pkgs: processes:
